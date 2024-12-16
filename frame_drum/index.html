@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frame Drum</title>
+    <!-- Add Prism CSS and Theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-color-dark: #212121;
+            --text-color-dark: #dcdcdc;
+            --bg-color-light: #f9f9f9;
+            --text-color-light: #333;
+            --highlight-color: #ffa500;
+            --bg-color: #212121;
+            --text-color: #dcdcdc;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1100px;
+            margin: 20px auto;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        header {
+            background-color: var(--bg-color);
+            text-align: center;
+            padding: 20px;
+            height: auto;
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+        }
+        header img {
+            height: 50px;
+            display: block;
+            margin: 0 auto;
+            transition: opacity 0.3s ease;
+        }
+        header img:hover {
+            opacity: 0.7;
+        }
+        .header-button {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+            transition: color 0.3s ease;
+        }
+        .header-button:hover {
+            color: #777;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 50px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: var(--text-color);
+        }
+        .divider {
+            margin: 20px auto;
+            border-top: 1px solid #777;
+            width: 100%;
+            max-width: 100%;
+        }
+        h1, h2 {
+            text-align: left;
+        }
+        pre {
+            border-radius: 6px;
+            padding: 1em;
+            margin: 1em 0;
+            overflow: auto;
+            background-color: #f0f0f0;
+        }
+        code {
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+            color: grey;
+        }
+        a {
+            color: var(--highlight-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #ffcc00;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #ff8c00;
+        }
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .copy-button {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .copy-button:hover {
+            color: #777;
+        }
+        .blog-content {
+            margin: 20px;
+        }
+
+        /* Add this media query below */
+        @media (max-width: 600px) {
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                font-size: 14px;
+            }
+
+            header {
+                padding: 10px;
+            }
+
+            .header-button {
+                padding: 8px 16px;
+            }
+        }
+
+        .rise-animation {
+            animation: riseUp 1s ease-out;
+        }
+        
+        @keyframes riseUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-animation {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .scroll-animation.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-container {
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, var(--text-color) 60%, var(--highlight-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .sharp {
+            color: var(--highlight-color);
+            font-family: 'Consolas', monospace;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: 10px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            animation: slideUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Section -->
+    <header>
+        <a href="https://frankfaruksampling.site" target="_blank">
+            <img id="logo" src="https://raw.githubusercontent.com/frankiefaruk/logo/refs/heads/main/frank_faruk_logo_white.svg" alt="Frank Faruk Logo">
+        </a>
+        <button class="header-button" onclick="window.location.href='https://frankfaruksampling.site'">FRANK FARUK SAMPLING</button>
+        <hr class="divider">
+
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <img id="theme-icon" src="https://img.icons8.com/ios-glyphs/30/dcdcdc/moon-symbol.png" alt="Dark Mode Icon" style="width: 20px; height: 20px; vertical-align: middle;">
+        </button>
+    </header>
+
+<!-- Body Section -->
+
+  <body>
+
+<div class="title-container">
+    <h1 class="main-title">Frame Drum</h1>
+    <p class="subtitle">Traditional Sounds Meet Modern Sampling</p>
+</div>
+
+<h2>A Sample library for Decent Sampler</h2>
+
+<p>Are you looking for a unique sound that adds a touch of magic to your compositions? Introducing the Frame Drum Sample Instrument, an innovative tool designed for Video Game, Film, and TV composers and producers. This extraordinary instrument doesn’t just stop at multimedia production; it transcends genres, bringing an exotic flair to any musical project.</p>
+
+<div style="display: flex; align-items: center; padding: 40px 20px; gap: 40px;">
+    <!-- Left column - Image -->
+    <div style="flex: 1;">
+        <img src="Images/framedrum_frankfaruksampling_3.jpg"
+             alt="Frame Drum"
+             class="scroll-animation"
+             style="width: 100%; height: auto; border-radius: 8px;">
+    </div>
+    
+    <!-- Right column - Text and Button -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+        <h3 style="margin: 0; font-size: 2em; color: var(--text-color);">
+            Explore Exotic Textures
+        </h3>
+        <p style="margin: 0; font-size: 1.1em; line-height: 1.6; color: var(--text-color);">
+            Frame Drum is crafted to help you produce a straightforward yet natural sound, specifically tailored for creating cinematic tones.
+        </p>
+        <a href="#" style="text-decoration: none;">
+            <button style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: var(--highlight-color);
+                color: #000000;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 6px;
+                font-size: 1.1em;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                opacity: 1;
+            " onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                <img src="https://img.icons8.com/ios-glyphs/30/000000/shopping-cart.png" 
+                     alt="Shopping Cart"
+                     style="width: 20px; height: 20px;">
+                BUY NOW
+            </button>
+        </a>
+    </div>
+</div>
+
+<h2>Why Choose the Frame Drum Sample Instrument?</h2>
+<p>The Frame Drum Sample Instrument offers a world of creative possibilities. Its distinctive, resonant tones make it the perfect addition to your sound palette, whether you're crafting cinematic scores, world music, or even experimental tracks. Here’s what makes it stand out:</p>
+
+<h3>Two Versions to Suit Your Needs</h3>
+<p>The Frame Drum Sample Instrument comes in two carefully crafted versions to cater to different creative requirements:</p>
+
+<div class="highlight">
+    <h4>FREE Version</h4>
+    <p>Immerse yourself in the essence of the Frame Drum with a collection of high-quality audio loops that showcase its remarkable sound.</p>
+</div>
+
+<div class="highlight">
+    <h4>PRO Version</h4>
+    <p>Unlock the full potential of the Frame Drum with features designed for unparalleled realism and flexibility:</p>
+    <ul>
+        <li><strong>8 Round Robin Samples:</strong> Enjoy an organic and lifelike playing experience, capturing subtle tonal variations.</li>
+        <li><strong>Two Instruments:</strong>
+            <ul>
+                <li><strong>Solo:</strong> For a focused and intimate sound.</li>
+                <li><strong>Duo:</strong> Panned left and right to create a wide and immersive stereo effect.</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div style="padding: 40px 0; text-align: center;">
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 80%; margin: 0 auto;">
+        <iframe 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+            src="https://www.youtube.com/embed/mgUgEgnZ-FI?si=AIWoFF9RkhVmgE29"
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+        <h3>High Quality Recording</h3>
+        <p>Every note of the Frame Drum Sample Instrument has been captured with exceptional clarity. We used a combination of Zoom H4 and Lewitt LCT 040 microphones to ensure the highest audio fidelity, allowing the true character of the instrument to shine through.</p>
+
+        <h3>Exclusive PRO Features</h3>
+        <p>As a PRO user, you gain access to exclusive resources that take your compositions to the next level:</p>
+        <ul>
+            <li><strong>MIDI Files:</strong> A treasure trove of ready-to-use patterns to kickstart your creativity.</li>
+            <li><strong>Rhythmic Foundations:</strong> Explore the traditional Arabic/Turkish rhythm known as “Duek” alongside newly added variant rhythms. These rhythmic templates provide a solid foundation for your compositions while sparking new ideas.</li>
+        </ul>
+
+        <h2>Endless Creative Possibilities</h2>
+        <p>From delicate, intimate passages to bold, cinematic textures, the Frame Drum Sample Instrument adapts to your vision. Its versatility makes it a must-have for composers and producers seeking a sound that’s both authentic and captivating.</p>
+
+<h3>Explanation of Each Makam in C# (with Microtonal Adjustments):</h3>
+<p>The documentation provides visual representations of each Makam (Üssşak, Rast, Suzïnak, and Zirgüleli Hicaz) on a MIDI keyboard, highlighting the notes included in each scale and any necessary microtonal adjustments.</p>
+<div style="padding: 40px 0; text-align: center;">
+    <img src="Images/free_beats_frankfaruksampling.jpg"
+         alt="Kaval Image"
+         class="scroll-animation"
+         style="display: block; margin: 0 auto; max-width: 80%; height: auto;">
+    </div>
+<h3>Links:</h3>
+<ul>
+    <li><a href="https://frankfaruksampling.site/" target="_blank">Home</a></li>
+    <li><a href="https://www.youtube.com/embed/mgUgEgnZ-FI?si=AIWoFF9RkhVmgE29" target="_blank">Demo Song</a></li>
+    <li><a href="https://soundcloud.com/frankfaruksampling/duek-frame-drum-rhythm-variations?in=decent-samples/sets/frame-drum-music-demos&si=01f2be0c5c1746b581482904f4473c82&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank">Sound Cloud</a></li>
+    <li><a href="MIDI/frame_drum_v2_[128].mid">MIDI</a></li>
+    <li><a href="Images/read_me.pdf" target="_blank">Read Me</a></li>
+</ul>
+
+</body>
+
+  <!-- Footer Section -->
+    <hr class="divider">
+    <footer style="text-align: center; margin: 20px 0; color: var(--text-color); font-size: 14px;">
+        Design by <a href="https://frankfaruksampling.site" target="_blank">Frank Faruk Sampling</a>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>
+        function copyToClipboard(selector) {
+            const codeBlock = document.querySelector(selector);
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('Code copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const themeToggle = document.querySelector('.theme-toggle');
+            const logo = document.getElementById('logo');
+            const themeIcon = document.getElementById('theme-icon');
+            const isDarkMode = getComputedStyle(root).getPropertyValue('--bg-color').trim() === '#212121';
+
+            if (isDarkMode) {
+                // Switch to light mode
+                root.style.setProperty('--bg-color', '#f9f9f9');
+                root.style.setProperty('--text-color', '#333');
+                themeIcon.src = 'https://img.icons8.com/ios-glyphs/30/000000/sun--v1.png'; // Light mode icon
+                themeIcon.alt = 'Light Mode Icon';
+                logo.src = 'https://raw.githubusercontent.com/frankiefaruk/logo/refs/heads/main/frank_faruk_logo_grey.svg';
+            } else {
+                // Switch to dark mode
+                root.style.setProperty('--bg-color', '#212121');
+                root.style.setProperty('--text-color', '#dcdcdc');
+                themeIcon.src = 'https://img.icons8.com/ios-glyphs/30/dcdcdc/moon-symbol.png'; // Dark mode icon
+                themeIcon.alt = 'Dark Mode Icon';
+                logo.src = 'https://raw.githubusercontent.com/frankiefaruk/logo/refs/heads/main/frank_faruk_logo_white.svg';
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    // Optional: stop observing after animation
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1 // Triggers when at least 10% of the element is visible
+        });
+
+        // Observe all elements with scroll-animation class
+        document.querySelectorAll('img').forEach((element) => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
