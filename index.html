@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaval in C#</title>
+    <!-- Add Prism CSS and Theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-color-dark: #212121;
+            --text-color-dark: #dcdcdc;
+            --bg-color-light: #f9f9f9;
+            --text-color-light: #333;
+            --highlight-color: #ffa500;
+            --bg-color: #212121;
+            --text-color: #dcdcdc;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        header {
+            background-color: var(--bg-color);
+            text-align: center;
+            padding: 20px;
+            height: auto;
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+        }
+        header img {
+            height: 50px;
+            display: block;
+            margin: 0 auto;
+            transition: opacity 0.3s ease;
+        }
+        header img:hover {
+            opacity: 0.7;
+        }
+        .header-button {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+            transition: color 0.3s ease;
+        }
+        .header-button:hover {
+            color: #777;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 50px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: var(--text-color);
+        }
+        .divider {
+            margin: 20px auto;
+            border-top: 1px solid #777;
+            width: 100%;
+            max-width: 100%;
+        }
+        h1, h2 {
+            text-align: left;
+        }
+        pre {
+            border-radius: 6px;
+            padding: 1em;
+            margin: 1em 0;
+            overflow: auto;
+            background-color: #f0f0f0;
+        }
+        code {
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+            color: grey;
+        }
+        a {
+            color: var(--highlight-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #ffcc00;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #ff8c00;
+        }
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .copy-button {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .copy-button:hover {
+            color: #777;
+        }
+        .blog-content {
+            margin: 20px;
+        }
+
+        /* Add this media query below */
+        @media (max-width: 600px) {
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                font-size: 14px;
+            }
+
+            header {
+                padding: 10px;
+            }
+
+            .header-button {
+                padding: 8px 16px;
+            }
+        }
+
+        .rise-animation {
+            animation: riseUp 1s ease-out;
+        }
+        
+        @keyframes riseUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-animation {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .scroll-animation.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-container {
+            padding: 10px 0;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-align: center;
+            background: linear-gradient(45deg, var(--text-color) 60%, var(--highlight-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .sharp {
+            color: var(--highlight-color);
+            font-family: 'Consolas', monospace;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: 10px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            animation: slideUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background-color: var(--bg-color);
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .grid-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.3);
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .grid-item:hover .overlay {
+            opacity: 1;
+        }
+
+        .overlay h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5<nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="framedrum.html">Frame Drum</a></li>
+                    <li><a href="kaval.html">Kaval</a></li>
+                    <li><a href="instruments.html">All Instruments</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>rem;
+            font-weight: 600;
+        }
+
+        .overlay p {
+            margin: 0;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 15px;
+            }
+        }
+
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .grid-item a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .grid-item a:hover {
+            text-decoration: none;
+        }
+
+        .rise-fade {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .rise-fade.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero {
+            background-color: #333;
+            background-image: url('Images/hero_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* This adds a dark overlay to make text more readable */
+        }
+
+        .hero .title-container {
+            position: relative;
+            z-index: 1; /* This ensures the text appears above the overlay */
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero .main-title {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .hero h2 {
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-menu-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-menu-toggle img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .navigation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(33, 33, 33, 0.95);
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .navigation-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .navigation-overlay nav {
+            text-align: center;
+        }
+
+        .navigation-overlay nav a {
+            display: block;
+            color: var(--text-color-dark);
+            text-decoration: none;
+            font-size: 1.0rem;
+            margin: 20px 0;
+            transition: color 0.3s ease;
+        }
+
+        .navigation-overlay nav a:hover {
+            color: var(--highlight-color);
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-color-dark);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .nav-menu-toggle {
+                top: 10px;
+                left: 10px;
+                padding: 8px;
+            }
+
+            .nav-menu-toggle img {
+                width: 20px;
+                height: 20px;
+            }
+
+            .navigation-overlay nav a {
+                font-size: 1.0rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="nav-menu-toggle" id="menuToggle">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/menu--v1.png" alt="Menu">
+    </button>
+
+    <div class="navigation-overlay" id="navigationOverlay">
+        <button class="close-menu" id="closeMenu">&times;</button>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="framedrum.html">Frame Drum</a>
+            <a href="kaval.html">Kaval</a>
+            <a href="instruments.html">All Instruments</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <a href="https://frankfaruksampling.site" target="_blank">
+            <img id="logo" src="https://raw.githubusercontent.com/frankiefaruk/logo/refs/heads/main/frank_faruk_logo_white.svg" alt="Frank Faruk Logo">
+        </a>
+        <button class="header-button" onclick="window.location.href='https://frankfaruksampling.site'">FRANK FARUK SAMPLING</button>
+        
+        <hr style="border: 1px solid var(--text-color); width: 50%; margin: 10px auto;">
+
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <img id="theme-icon" src="https://img.icons8.com/ios-glyphs/30/dcdcdc/moon-symbol.png" alt="Dark Mode Icon" style="width: 20px; height: 20px; vertical-align: middle;">
+        </button>
+    </header>
+    <div class="hero">
+        <div class="title-container">
+            <h1 class="main-title" style="color: white;">Ethnic Instruments for<br>Modern Music</h1>
+            <h2 style="color: white;">"Designed with versatility in mind, our instruments are ideal for <br>TV, film, documentaries, and video game soundtracks."</h2>
+        </div>
+    </div>
+
+    <div style="padding: 30px;"></div>
+    <h2 style="text-align: center;">NEW COLLECTION</h2>
+    <h1 style="text-align: center;">Explore our products</h1>
+    <div style="padding: 30px;"></div>
+
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <a href="framedrum.html">
+                <img src="Images/framedrum_frankfaruksampling_4.jpg" alt="Frame Drum">
+                <div class="overlay">
+                    <h3>Frame Drum</h3>
+                    <p>Traditional percussion instrument</p>
+                </div>
+            </a>
+        </div>
+        <div class="grid-item">
+            <a href="kaval.html">
+                <img src="Images/kaval_frankfaruksampling_8.jpg" alt="Kaval">
+                <div class="overlay">
+                    <h3>Kaval</h3>
+                    <p>End-blown flute from the Balkans</p>
+                </div>
+            </a>
+        </div>
+        <div class="grid-item">
+            <img src="Images/bassgadulka_frankfaruksampling_1.jpg" alt="Bass Gadulka">
+            <div class="overlay">
+                <h3>Bass Gadulka</h3>
+                <p>Bulgarian bowed string instrument</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="Images/fretlessguitar_frankfaruksampling_1.jpg" alt="Fretless Guitar">
+            <div class="overlay">
+                <h3>Fretless Guitar</h3>
+                <p>Modern take on traditional strings</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Reviews Section -->
+    <div style="background-color: #212121; color: white; padding: 40px; text-align: center;">
+        <h2>CUSTOMER REVIEWS</h2>
+        <p>Hear what our clients say about our unique audio sampling instruments.</p>
+        <div style="display: flex; justify-content: center; gap: 20px;">
+            <div style="border: 0.5px solid white; background-color: transparent; padding: 20px; width: 320px;">
+                <p>★★★★★</p>
+                <p>With Exotic Scale, you can easily craft Easter music tones. Incredibly convenient!!</p>
+                <p><strong>Maria Smith</strong><br>Brighton UK</p>
+            </div>
+            <div style="border: 0.5px solid white; background-color: transparent; padding: 20px; width: 320px;">
+                <p>★★★★★</p>
+                <p>The ethnic instruments transformed my music production. Highly recommend Frank Faruk Sampling!</p>
+                <p><strong>Alex Gokmen</strong><br>London UK</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <hr class="divider">
+    <footer style="text-align: center; margin: 20px 0; color: var(--text-color); font-size: 14px;">
+        Design by <a href="https://frankfaruksampling.site" target="_blank">Frank Faruk Sampling</a>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>
+        function copyToClipboard(selector) {
+            const codeBlock = document.querySelector(selector);
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('Code copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const themeToggle = document.querySelector('.theme-toggle');
+            const logo = document.getElementById('logo');
+            const themeIcon = document.getElementById('theme-icon');
+            const isDarkMode = getComputedStyle(root).getPropertyValue('--bg-color').trim() === '#212121';
+
+            if (isDarkMode) {
+                // Switch to light mode
+                root.style.setProperty('--bg-color', '#f9f9f9');
+                root.style.setProperty('--text-color', '#333');
+                themeIcon.src = 'https://img.icons8.com/ios-glyphs/30/000000/sun--v1.png'; // Light mode icon
+                themeIcon.alt = 'Light Mode Icon';
+                logo.src = 'https://raw.githubusercontent.com/frankiefaruk/logo/refs/heads/main/frank_faruk_logo_grey.svg';
+            } else {
+                // Switch to dark mode
+                root.style.setProperty('--bg-color', '#212121');
+                root.style.setProperty('--text-color', '#dcdcdc');
+                themeIcon.src = 'https://img.icons8.com/ios-glyphs/30/dcdcdc/moon-symbol.png'; // Dark mode icon
+                themeIcon.alt = 'Dark Mode Icon';
+                logo.src = 'https://raw.githubusercontent.com/frankiefaruk/logo/refs/heads/main/frank_faruk_logo_white.svg';
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    // Optional: stop observing after animation
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1 // Triggers when at least 10% of the element is visible
+        });
+
+        // Observe all elements with scroll-animation class
+        document.querySelectorAll('img').forEach((element) => {
+            observer.observe(element);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const navigationOverlay = document.getElementById('navigationOverlay');
+            const closeMenu = document.getElementById('closeMenu');
+
+            menuToggle.addEventListener('click', () => {
+                navigationOverlay.classList.add('active');
+            });
+
+            closeMenu.addEventListener('click', () => {
+                navigationOverlay.classList.remove('active');
+            });
+
+            // Close menu when clicking outside or on a link
+            navigationOverlay.addEventListener('click', (event) => {
+                if (event.target === navigationOverlay) {
+                    navigationOverlay.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
